@@ -1,3 +1,5 @@
+import path from 'path'
+
 const config = {
   projectName: 'YmlApp',
   date: '2021-9-15',
@@ -19,6 +21,10 @@ const config = {
     }
   },
   framework: 'react',
+  alias: {
+    '@/asstes': path.resolve(__dirname, '..', 'src/asstes'),
+    '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+  },
   mini: {
     postcss: {
       pxtransform: {

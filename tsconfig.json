@@ -21,11 +21,15 @@
     "typeRoots": [
       "node_modules/@types",
       "global.d.ts"
-    ]
+    ],
+    "paths": {
+      "@/asstes/*": ["./src/asstes/*"],
+      "@/utils/*": ["./src/utils/*"],
+    }
   },
   "exclude": [
     "node_modules",
     "dist"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
 }
