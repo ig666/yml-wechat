@@ -32,7 +32,7 @@ const config = {
       url: {
         enable: true,
         config: {
-          limit: 1024, // 设定转换尺寸上限
+          limit: 10240, // 设定转换尺寸上限
         },
       },
       cssModules: {
@@ -47,6 +47,7 @@ const config = {
   h5: {
     publicPath: "/",
     staticDirectory: "static",
+    esnextModules: ['taro-ui'],
     postcss: {
       autoprefixer: {
         enable: true,
