@@ -1,26 +1,38 @@
-import { useCallback } from "react";
+import {useState} from "react";
 import { View } from "@tarojs/components";
-import { useLogin, useRouter } from "taro-hooks";
 import { AtButton } from "taro-ui";
+import LoginPage from './components/loginPage'
+import RegisterPage from './components/registerPage'
 import "./index.less";
 
+type status='normal' | 'login' | 'register';
 const Login = () => {
-  const [info, { relaunch }] = useRouter();
-  const [login, checkLogin] = useLogin();
-  const loginIn = useCallback(() => {
-    login(true)
-      .then((code: string) => {
-        console.log("code", code);
-      })
-      .catch(err => {
-        console.log("获取失败", err);
-      });
-  }, [login]);
+  const [loginStatus,setLoginStatus]=useState<status>('normal')
+  const loginContent=()=>{
+    if(loginStatus==='normal'){
+      return (
+        <>
+          <AtButton type='primary' onClick={()=>setLoginStatus('login')}>
+            手机号登录
+          </AtButton>
+          <AtButton type='secondary' onClick={()=>setLoginStatus('register')} >
+            注册
+          </AtButton>
+        </>
+      )
+    }else if (loginStatus==='login'){
+      return (
+        <LoginPage goLogin={setLoginStatus} />
+      )
+    }else if(loginStatus==='register'){
+      return (
+        <RegisterPage goLogin={setLoginStatus} />
+      )
+    }
+  }
   return (
     <View className='login'>
-      <AtButton type='primary' onClick={loginIn}>
-        手机号一键登录
-      </AtButton>
+      {loginContent()}
     </View>
   );
 };
