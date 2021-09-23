@@ -5,12 +5,13 @@ export default {
     "pages/mine/index",
     "pages/register/index",
     "pages/work/index",
+    "pages/intactInfo/index",
   ],
   window: {
     backgroundTextStyle: "light",
-    navigationBarBackgroundColor: "#fff",
-    navigationBarTitleText: "WeChat",
-    navigationBarTextStyle: "black"
+    navigationBarTitleText: "牙美啦",
+    navigationBarTextStyle:'white',
+    navigationBarBackgroundColor:'#6190E8'
   },
   tabBar: {
     color: "#333333",
