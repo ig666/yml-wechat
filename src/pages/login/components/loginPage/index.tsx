@@ -3,7 +3,7 @@ import Taro from "@tarojs/taro";
 import {useRequest, useRouter} from "taro-hooks";
 import { View } from "@tarojs/components";
 import {AtInput,AtForm,AtButton,AtIcon } from "taro-ui";
-import {request} from '../../../../utils/request';
+import {request} from '@/utils/request';
 import './index.less'
 
 
