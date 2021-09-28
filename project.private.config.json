@@ -13,14 +13,14 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/mine/index",
-          "pathName": "pages/mine/index",
+          "name": "完善资料",
+          "pathName": "pages/intactInfo/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "完善资料",
-          "pathName": "pages/intactInfo/index",
+          "name": "作业",
+          "pathName": "pages/work/index",
           "query": "",
           "scene": null
         }
