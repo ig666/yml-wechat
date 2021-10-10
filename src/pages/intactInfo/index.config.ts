@@ -1,4 +1,4 @@
 export default {
-  navigationBarTitleText: '完善资料',
+  navigationBarTitleText: '个人资料',
   enableShareAppMessage: true,
 };

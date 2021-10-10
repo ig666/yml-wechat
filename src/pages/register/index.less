@@ -1,4 +1,55 @@
-.register{
+.register {
   width: 100%;
   height: 100%;
+  .scrollview {
+    height: 100vh;
+    .semester-card {
+      border-radius: 8px;
+      padding: 28px 24px;
+      background: #ffffff;
+      margin: 24px;
+      .top-info {
+        padding-bottom: 26px;
+        border-bottom: 1px solid #f6f6f6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .name {
+          display: flex;
+          align-items: center;
+          font-size: 24px;
+          color: #303133;
+          font-weight: bold;
+          line-height: 34px;
+          .title {
+            color: #606266;
+          }
+        }
+        .time {
+          font-size: 24px;
+          color: #909399;
+          line-height: 34px;
+        }
+      }
+      .content {
+        margin: 32px 24px 48px 24px;
+        font-size: 28px;
+        color: #606266;
+        line-height: 40px;
+      }
+      .price-signup{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .price{
+          color: #FC8282;
+          font-size: 34px;
+          font-weight: bold;
+        }
+        .signup{
+          margin: 0px;
+        }
+      }
+    }
+  }
 }

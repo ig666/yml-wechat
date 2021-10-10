@@ -1,7 +1,8 @@
 import { AtForm, AtInput, AtButton, AtMessage } from "taro-ui";
 import { View, Picker } from "@tarojs/components";
 import { useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useDidShow } from "@tarojs/taro";
+import { useRouter } from "@tarojs/runtime";
 import { request } from "@/utils/request";
 import { useRequest } from "taro-hooks";
 import "./index.less";
@@ -14,24 +15,40 @@ enum Gender {
 const IntactInfo = () => {
   const selector = ["男", "女"];
   const [info, setInfo] = useState({
-    id: "a8f88b67-1c4d-4f8a-8014-6f312fd34501",
+    phone: "",
+    password: "",
     name: "",
     clinic: "",
     post: "",
     gender: Gender["男"]
   });
+  let [checkPassword, setcheck] = useState("");
+  let [joinType, setType] = useState("regeist");
+  const router = useRouter();
+  useDidShow(() => {
+    if (router?.params.type === "regeist") {
+      setType("regeist");
+    } else if (router?.params.type === "update") {
+      setType("update");
+      run("/wechat/info", "GET");
+    }
+  });
   //请求类
   const { run, loading } = useRequest(request, {
     manual: true,
     debounceInterval: 500,
-    onSuccess: ({ data }) => {
-      if (data) {
-        Taro.showToast({
-          title: data,
-          icon: "success",
-          duration: 2000
-        });
-        Taro.navigateBack({ delta: 1 });
+    onSuccess: ({ data }, params) => {
+      if (params[0] !== "/wechat/info") {
+        if (data) {
+          Taro.showToast({
+            title: data,
+            icon: "success",
+            duration: 2000
+          });
+          Taro.navigateBack({ delta: 1 });
+        }
+      } else {
+        setInfo(data)
       }
     }
   });
@@ -40,6 +57,22 @@ const IntactInfo = () => {
     setInfo({ ...info, gender: parseInt(val.detail.value) === 0 ? 1 : 2 });
   };
   const onSubmit = () => {
+    let test = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/;
+    if (!info.phone || !test.test(info.phone))
+      return Taro.atMessage({
+        message: "请检查手机号",
+        type: "warning"
+      });
+    if (!info.password)
+      return Taro.atMessage({
+        message: "请输入密码",
+        type: "warning"
+      });
+    if (!checkPassword || checkPassword !== info.password)
+      return Taro.atMessage({
+        message: "请检查两次密码输入是否正确!",
+        type: "warning"
+      });
     if (!info.name)
       return Taro.atMessage({
         message: "请输入姓名",
@@ -55,12 +88,58 @@ const IntactInfo = () => {
         message: "请输入职务",
         type: "warning"
       });
-    run("/wechat/updateWechatUser", "POST", info, false);
+    run(
+      router?.params.type === "regeist"
+        ? "/wechat/register"
+        : "/wechat/updateWechatUser",
+      "POST",
+      info,
+      false
+    );
   };
   return (
     <View className='intact-info'>
       <AtMessage />
       <AtForm>
+        <AtInput
+          required
+          name='phone'
+          title='手机号:'
+          type='text'
+          placeholder='请输入手机号'
+          value={info.phone}
+          onChange={(val: string) => {
+            setInfo(data => {
+              data.phone = val;
+              return data;
+            });
+          }}
+        />
+        <AtInput
+          required
+          name='password'
+          title='密码:'
+          type='text'
+          placeholder='请输入密码'
+          value={info.password}
+          onChange={(val: string) => {
+            setInfo(data => {
+              data.password = val;
+              return data;
+            });
+          }}
+        />
+        <AtInput
+          required
+          name='checkPassword'
+          title='确认密码:'
+          type='text'
+          placeholder='请输入确认密码'
+          value={checkPassword}
+          onChange={(val: string) => {
+            setcheck(val);
+          }}
+        />
         <AtInput
           required
           name='name'
@@ -123,7 +202,7 @@ const IntactInfo = () => {
         type='primary'
         className='submit'
       >
-        完善资料
+        {joinType === "regeist" ? "完成注册" : "完成修改"}
       </AtButton>
     </View>
   );
