@@ -13,57 +13,76 @@ const Register = () => {
   //状态类
   const [semesterList, setList] = useState<any[]>([]);
   const [loginStatus, setLoginStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [pageNation, setPageNation] = useState({
     pageSize: 10,
     pageIndex: 1
   });
   const [total, setTotal] = useState(0);
   //请求类
-  const { run, loading } = useRequest(request, {
+  const { run } = useRequest(request, {
     manual: true,
     debounceInterval: 500,
-    onSuccess: ({ data }) => {
-      setList(data.list);
-      setTotal(data.total);
+    onSuccess: ({ data }, parmas) => {
+      if (data) {
+        if (parmas[0] === "/semester") {
+          setList([...data.list, ...semesterList]);
+          setTotal(data.total);
+          if (loading) {
+            setLoading(false);
+          }
+        } else if (parmas[0] === "/semester/signUp") {
+          Taro.showToast({ title: data, icon: "success", duration: 2000 });
+          setList([]);
+          setLoading(true)
+          setPageNation({
+            pageSize: 10,
+            pageIndex: 1
+          });
+        }
+      }
     }
   });
   //方法类
-  const toSignup = semesrerId => {
-    run("/semester/signUp", "POST", { ...pageNation, semesrerId }, false);
+  const toSignup = semesterId => {
+    run("/semester/signUp", "POST", { semesterId }, false);
   };
   const renderList = () => {
     if (semesterList && semesterList.length <= 0) {
       return <NoData />;
     }
     const list = semesterList.map((item, index) => (
-      <View key={index} className='semester-card'>
-        <View className='top-info'>
-          <View className='name'>
-            {item.semesterName}·
-            <View className='title'>{item.semesterTitle}</View>
+      <>
+        <View className='divider'></View>
+        <View key={index} className='semester-card'>
+          <View className='top-info'>
+            <View className='name'>
+              {item.semesterName}·
+              <View className='title'>{item.semesterTitle}</View>
+            </View>
+            <View className='time'>
+              开课时间:{formattYMDHMS(item.classStartTime)}
+            </View>
           </View>
-          <View className='time'>
-            开课时间:{formattYMDHMS(item.classStartTime)}
+          <View className='content'>{item.content}</View>
+          <View className='price-signup'>
+            <View className='price'>{item.price}￥</View>
+            <AtButton
+              onClick={() => {
+                toSignup(item.id);
+              }}
+              type='primary'
+              className='signup'
+              disabled={item.onSignUp}
+            >
+              {item.onSignUp ? "已报名" : "报名"}
+            </AtButton>
           </View>
         </View>
-        <View className='content'>{item.content}</View>
-        <View className='price-signup'>
-          <View className='price'>{item.price}￥</View>
-          <AtButton
-            onClick={() => {
-              toSignup(item.id);
-            }}
-            type='primary'
-            className='signup'
-            disabled={item.onSignUp}
-          >
-            {item.onSignUp ? "已报名" : "报名"}
-          </AtButton>
-        </View>
-      </View>
+      </>
     ));
-    if (total === pageNation.pageIndex * pageNation.pageSize) {
-      list.push(<View className='no-moredate'>没有更多拉...</View>);
+    if (total < pageNation.pageIndex * pageNation.pageSize) {
+      list.push(<View className='no-moredate'>没有更多啦...</View>);
     }
     return list;
   };
@@ -74,7 +93,7 @@ const Register = () => {
       run("/semester", "GET", parmas, false);
     };
     getList(pageNation);
-  }, [loginStatus, pageNation, run]);
+  }, [loginStatus, pageNation]);
   useEffect(() => {
     const token = Taro.getStorageSync("token");
     if (token) {
@@ -91,17 +110,19 @@ const Register = () => {
           scrollY
           scrollAnchoring
           refresher-enabled
-          refresher-threshold={100}
+          refresher-threshold={80}
           refresher-default-style='black'
           refresher-triggered={loading}
           onRefresherRefresh={() => {
+            setLoading(true);
+            setList([]);
             setPageNation({
               pageSize: 10,
               pageIndex: 1
             });
           }}
           onScrollToLower={() => {
-            if (total <= pageNation.pageIndex * pageNation.pageSize) {
+            if (total >= pageNation.pageIndex * pageNation.pageSize) {
               setPageNation({
                 ...pageNation,
                 pageIndex: pageNation.pageIndex + 1
