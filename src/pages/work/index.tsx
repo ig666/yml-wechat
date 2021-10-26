@@ -1,15 +1,23 @@
-import { View, ScrollView } from "@tarojs/components";
+import { View, ScrollView, Image } from "@tarojs/components";
 import { useEffect, useState } from "react";
 import Taro from "@tarojs/taro";
 import { request } from "@/utils/request";
+import { AtButton } from "taro-ui";
 import { useRequest } from "taro-hooks";
 import NoData from "@/components/noData";
 import NoLogin from "@/components/noLogin";
+import { formattYMDHMS } from "@/utils/formDate";
 import "./index.less";
 
+enum WorkStatus {
+  已发布 = 1, // 已发布
+  已提交 = 2, // 已提交
+  及格 = 3, // 及格
+  不及格 = 4 // 不及格
+}
 const Register = () => {
   //状态类
-  const [semesterList, setList] = useState<any[]>([]);
+  const [workList, setList] = useState<any[]>([]);
   const [loginStatus, setLoginStatus] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pageNation, setPageNation] = useState({
@@ -23,60 +31,66 @@ const Register = () => {
     debounceInterval: 500,
     onSuccess: ({ data }, parmas) => {
       if (data) {
-        if (parmas[0] === "/semester") {
-          setList([...data.list, ...semesterList]);
+        if (parmas[0] === "/wechat-user-work") {
+          setList([...data.list, ...workList]);
           setTotal(data.total);
           if (loading) {
             setLoading(false);
           }
-        } else if (parmas[0] === "/semester/signUp") {
-          Taro.showToast({ title: data, icon: "success", duration: 2000 });
-          setList([]);
-          setLoading(true);
-          setPageNation({
-            pageSize: 10,
-            pageIndex: 1
-          });
         }
       }
     }
   });
   //方法类
-  const toSignup = semesterId => {
-    run("/semester/signUp", "POST", { semesterId }, false);
-  };
   const renderList = () => {
-    if (semesterList && semesterList.length <= 0) {
+    if (workList && workList.length <= 0) {
       return <NoData />;
     }
-    const list = semesterList.map((item, index) => (
+    const list = workList.map((item, index) => (
       <>
         <View className='divider'></View>
-        {/* <View key={index} className='semester-card'>
-          <View className='top-info'>
-            <View className='name'>
-              {item.semesterName}·
-              <View className='title'>{item.semesterTitle}</View>
+        <View key={index} className='work-card'>
+          <View className='work-title'>
+            <View className='semester-name'>
+              所属学期:{item.semester.semesterName}
             </View>
             <View className='time'>
-              开课时间:{formattYMDHMS(item.classStartTime)}
+              发布时间:{formattYMDHMS(item.createTime)}
             </View>
           </View>
-          <View className='content'>{item.content}</View>
-          <View className='price-signup'>
-            <View className='price'>{item.price}￥</View>
+          <View className='describe'>{item.describe}</View>
+          <View className='work-image-list'>
+            {item.wechatUserWorkPhotos
+              .slice(0, 3)
+              .map((wechatUserWorkPhoto, inde) => (
+                <Image
+                  lazyLoad
+                  className='work-image'
+                  key={inde}
+                  src={wechatUserWorkPhoto.photoUrl}
+                />
+              ))}
+            {item.wechatUserWorkPhotos.length > 3 ? (
+              <View className='beyond-length'>{`+${item.wechatUserWorkPhotos
+                .length - 3}`}</View>
+            ) : (
+              ""
+            )}
+          </View>
+          <View className='work-bottom'>
+            <View className='status'>{WorkStatus[item.status]}</View>
             <AtButton
               onClick={() => {
-                toSignup(item.id);
+                console.log("查看");
               }}
-              type='primary'
-              className='signup'
-              disabled={item.onSignUp}
+              type='secondary'
+              size='small'
+              className='see-work'
             >
-              {item.onSignUp ? "已报名" : "报名"}
+              查看
             </AtButton>
           </View>
-        </View> */}
+        </View>
       </>
     ));
     if (total < pageNation.pageIndex * pageNation.pageSize) {
@@ -105,7 +119,7 @@ const Register = () => {
     getList(params);
   }, [loginStatus, pageNation]);
   return (
-    <View className='register'>
+    <View className='work'>
       {loginStatus ? (
         <ScrollView
           className='scrollview'
