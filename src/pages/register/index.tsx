@@ -26,7 +26,7 @@ const Register = () => {
     onSuccess: ({ data }, parmas) => {
       if (data) {
         if (parmas[0] === "/semester") {
-          setList([...data.list, ...semesterList]);
+          setList([...semesterList, ...data.list]);
           setTotal(data.total);
           if (loading) {
             setLoading(false);
@@ -34,7 +34,7 @@ const Register = () => {
         } else if (parmas[0] === "/semester/signUp") {
           Taro.showToast({ title: data, icon: "success", duration: 2000 });
           setList([]);
-          setLoading(true)
+          setLoading(true);
           setPageNation({
             pageSize: 10,
             pageIndex: 1

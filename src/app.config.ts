@@ -5,13 +5,14 @@ export default {
     "pages/mine/index",
     "pages/register/index",
     "pages/work/index",
-    "pages/intactInfo/index",
+    "pages/workDetail/index",
+    "pages/intactInfo/index"
   ],
   window: {
     backgroundTextStyle: "light",
     navigationBarTitleText: "牙美啦",
-    navigationBarTextStyle:'white',
-    navigationBarBackgroundColor:'#6190E8'
+    navigationBarTextStyle: "white",
+    navigationBarBackgroundColor: "#6190E8"
   },
   tabBar: {
     color: "#333333",
@@ -23,27 +24,27 @@ export default {
         text: "首页",
         pagePath: "pages/home/index",
         iconPath: "asstes/images/home.png",
-        selectedIconPath:"asstes/images/check-home.png"
+        selectedIconPath: "asstes/images/check-home.png"
       },
       {
         text: "作业",
         pagePath: "pages/work/index",
         iconPath: "asstes/images/work.png",
-        selectedIconPath:"asstes/images/check-work.png"
+        selectedIconPath: "asstes/images/check-work.png"
       },
       {
         text: "报名",
         pagePath: "pages/register/index",
         iconPath: "asstes/images/register.png",
-        selectedIconPath:"asstes/images/check-register.png"
+        selectedIconPath: "asstes/images/check-register.png"
       },
       {
         text: "我的",
         pagePath: "pages/mine/index",
         iconPath: "asstes/images/mine.png",
-        selectedIconPath:"asstes/images/check-mine.png"
-      },
+        selectedIconPath: "asstes/images/check-mine.png"
+      }
     ],
-    "position": "bottom"
+    position: "bottom"
   }
 };

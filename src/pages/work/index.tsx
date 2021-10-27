@@ -15,7 +15,13 @@ enum WorkStatus {
   及格 = 3, // 及格
   不及格 = 4 // 不及格
 }
-const Register = () => {
+enum WorkStatusColors {
+  "#18D0CC" = 1,
+  "#3A74F2" = 2,
+  "#6AD038" = 3,
+  "#FA5D5D" = 4
+}
+const Work = () => {
   //状态类
   const [workList, setList] = useState<any[]>([]);
   const [loginStatus, setLoginStatus] = useState(false);
@@ -32,7 +38,7 @@ const Register = () => {
     onSuccess: ({ data }, parmas) => {
       if (data) {
         if (parmas[0] === "/wechat-user-work") {
-          setList([...data.list, ...workList]);
+          setList([...workList, ...data.list]);
           setTotal(data.total);
           if (loading) {
             setLoading(false);
@@ -78,10 +84,20 @@ const Register = () => {
             )}
           </View>
           <View className='work-bottom'>
-            <View className='status'>{WorkStatus[item.status]}</View>
+            <View
+              className='status'
+              style={{ color: WorkStatusColors[item.status] }}
+            >
+              {WorkStatus[item.status]}
+            </View>
             <AtButton
               onClick={() => {
-                console.log("查看");
+                Taro.navigateTo({
+                  url: "/pages/workDetail/index",
+                  success: res => {
+                    res.eventChannel.emit("workDetail", { data: item });
+                  }
+                });
               }}
               type='secondary'
               size='small'
@@ -155,4 +171,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Work;
