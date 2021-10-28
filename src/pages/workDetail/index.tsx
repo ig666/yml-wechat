@@ -3,6 +3,7 @@ import Taro, { getCurrentPages } from "@tarojs/taro";
 import { useEffect, useState } from "react";
 import { AtImagePicker, AtButton } from "taro-ui";
 import { File } from "taro-ui/types/image-picker";
+import { uploadImg } from "@/utils/uploadImg";
 import "./index.less";
 
 enum WorkStatus {
@@ -127,14 +128,36 @@ const WorkDetail = () => {
       </View>
     );
   };
-  const toOk = () => {
-    console.log("点击完成");
+  const toOk = async () => {
+    let uploadErr = false;
+    let fileUrls: string[] = [];
+    Taro.showLoading({ title: "上传中" });
+    for (let file of files) {
+      let url = await uploadImg(file);
+      if (url) {
+        fileUrls.push(url);
+      } else {
+        uploadErr = true;
+      }
+    }
+    Taro.hideLoading();
+    if (!uploadErr) {
+      Taro.showToast({ title: "上传成功" });
+    } else {
+      Taro.showToast({ title: "上传失败", icon: "none" });
+    }
   };
   return (
     <View className='work-detail'>
       {renderWorkTemp()}
       {renderWork()}
-      <AtButton onClick={toOk} className='work-btn' type='primary'>
+      <AtButton
+        onClick={() => {
+          toOk();
+        }}
+        className='work-btn'
+        type='primary'
+      >
         {WorkStatusBtn[workDetail?.status || 1]}
       </AtButton>
     </View>
