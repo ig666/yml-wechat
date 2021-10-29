@@ -82,6 +82,15 @@ const Work = () => {
             ) : (
               ""
             )}
+
+            {/* 占位元素 */}
+            <View className='diver'></View>
+            <View className='diver'></View>
+            <View className='diver'></View>
+            <View className='diver'></View>
+            <View className='diver'></View>
+            <View className='diver'></View>
+            <View className='diver'></View>
           </View>
           <View className='work-bottom'>
             <View
@@ -105,6 +114,10 @@ const Work = () => {
             >
               查看
             </AtButton>
+          </View>
+          <View className='remark'>
+            备注：
+            <View className='remark-item'>{item.remark}</View>
           </View>
         </View>
       </>

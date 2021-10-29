@@ -3,6 +3,8 @@ import Taro, { getCurrentPages } from "@tarojs/taro";
 import { useEffect, useState } from "react";
 import { AtImagePicker, AtButton } from "taro-ui";
 import { File } from "taro-ui/types/image-picker";
+import { useRequest } from "taro-hooks";
+import { request } from "@/utils/request";
 import { uploadImg } from "@/utils/uploadImg";
 import "./index.less";
 
@@ -40,6 +42,18 @@ interface WorkDetail {
   updateTime: Date;
 }
 const WorkDetail = () => {
+  //请求类
+  const { run, loading } = useRequest(request, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: ({ data }, parmas) => {
+      if (data) {
+        console.log(data);
+        Taro.showToast({ title: "上传成功" });
+      }
+    }
+  });
+
   //状态类
   const [workDetail, setDetail] = useState<WorkDetail | null>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -61,74 +75,81 @@ const WorkDetail = () => {
       urls: workDetail?.wechatUserWorkPhotos.map(item => item.photoUrl)
     });
   };
-  //目前只有新增才会显示示例模板
   const renderWorkTemp = () => {
     let temList;
-    if (workDetail?.status === 1) {
-      temList = workDetail.wechatUserWorkPhotos.map((item: any, index) => {
-        return (
-          <View key={index} className='item-mask'>
-            <Image
-              onClick={() => {
-                previewTemImage(index);
-              }}
-              className='tem-item'
-              src={item.photoUrl}
-            />
-            {item.photoDescript ? (
-              <View className='mask'>{item.photoDescript}</View>
-            ) : (
-              ""
-            )}
-          </View>
-        );
-      });
+    temList = workDetail?.wechatUserWorkPhotos.map((item: any, index) => {
       return (
-        <View className='tem-content'>
-          <View className='title'>模板示例</View>
-          <View className='tem-list'>
-            {temList}
-            <View></View>
-            <View></View>
-            <View></View>
-            <View></View>
-            <View></View>
-          </View>
+        <View key={index} className='item-mask'>
+          <Image
+            onClick={() => {
+              previewTemImage(index);
+            }}
+            className='tem-item'
+            src={item.photoUrl}
+          />
+          {item.photoDescript ? (
+            <View className='mask'>{item.photoDescript}</View>
+          ) : (
+            ""
+          )}
+        </View>
+      );
+    });
+    return (
+      <View className='tem-content'>
+        <View className='title'>
+          {workDetail?.status === 1 ? "模板示例" : "作业详情"}
+        </View>
+        <View className='tem-list'>
+          {temList}
+          <View></View>
+          <View></View>
+          <View></View>
+          <View></View>
+          <View></View>
+        </View>
+      </View>
+    );
+  };
+  const renderWork = () => {
+    if (workDetail?.status === 1 || workDetail?.status === 4) {
+      return (
+        <View className='work-content'>
+          <View className='title'>提交作业</View>
+          <AtImagePicker
+            multiple
+            count={workDetail?.wechatUserWorkPhotos.length}
+            files={files}
+            onChange={file => {
+              if (
+                files.length + files.length >
+                workDetail!.wechatUserWorkPhotos.length
+              ) {
+                return Taro.showToast({
+                  title: "不可超过模板数",
+                  icon: "none"
+                });
+              }
+              setFiles(file);
+            }}
+            onFail={fail => {
+              console.log(fail);
+            }}
+            onImageClick={index => {
+              Taro.previewImage({
+                current: files[index].url,
+                urls: files.map(item => item.url)
+              });
+            }}
+          />
         </View>
       );
     }
   };
-  const renderWork = () => {
-    return (
-      <View className='work-content'>
-        <View className='title'>作业</View>
-        <AtImagePicker
-          multiple
-          count={workDetail?.wechatUserWorkPhotos.length}
-          files={files}
-          onChange={file => {
-            if (
-              files.length + files.length >
-              workDetail!.wechatUserWorkPhotos.length
-            ) {
-              return Taro.showToast({ title: "不可超过模板数", icon: "none" });
-            }
-            setFiles(file);
-          }}
-          onFail={fail => {
-            console.log(fail);
-          }}
-          onImageClick={index => {
-            Taro.previewImage({
-              current: files[index].url,
-              urls: files.map(item => item.url)
-            });
-          }}
-        />
-      </View>
-    );
-  };
-  const toOk = async () => {
+  //提交作业
+  const submitWork = async (status: number) => {
+    if (files.length <= 0)
+      return Taro.showToast({ title: "至少选择一张图片", icon: "none" });
     let uploadErr = false;
     let fileUrls: string[] = [];
     Taro.showLoading({ title: "上传中" });
@@ -142,9 +163,21 @@ const WorkDetail = () => {
     }
     Taro.hideLoading();
     if (!uploadErr) {
-      Taro.showToast({ title: "上传成功" });
+      workDetail!.status = 2;
+      workDetail!.wechatUserWorkPhotos = [];
+      fileUrls.map(item => {
+        workDetail!.wechatUserWorkPhotos.push({ photoUrl: item });
+      });
+      run("/wechat-user-work", "PUT", workDetail);
     } else {
       Taro.showToast({ title: "上传失败", icon: "none" });
+    }
+  };
+  const toOk = async () => {
+    if (workDetail?.status === 2 || workDetail?.status === 3) {
+      Taro.navigateBack();
+    } else if (workDetail?.status === 1 || workDetail?.status === 4) {
+      submitWork(2);
     }
   };
   return (
@@ -152,6 +185,7 @@ const WorkDetail = () => {
       {renderWorkTemp()}
       {renderWork()}
       <AtButton
+        loading={loading}
         onClick={() => {
           toOk();
         }}
