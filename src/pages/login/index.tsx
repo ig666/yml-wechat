@@ -1,35 +1,89 @@
-import Taro from "@tarojs/taro";
 import { useState } from "react";
+import Taro from "@tarojs/taro";
+import { useRequest, useRouter } from "taro-hooks";
 import { View } from "@tarojs/components";
-import { AtButton } from "taro-ui";
-import LoginPage from "./components/loginPage";
+import { AtInput, AtButton, AtMessage } from "taro-ui";
+import { request } from "@/utils/request";
 import "./index.less";
 
-type status = "normal" | "login" | "register";
 const Login = () => {
-  const [loginStatus, setLoginStatus] = useState<status>("normal");
-  const loginContent = () => {
-    if (loginStatus === "normal") {
-      return (
-        <>
-          <AtButton type='primary' onClick={() => setLoginStatus("login")}>
-            手机号登录
-          </AtButton>
-          <AtButton
-            type='secondary'
-            onClick={() => {
-              Taro.navigateTo({ url: `/pages/intactInfo/index?type=regeist` });
-            }}
-          >
-            注册
-          </AtButton>
-        </>
-      );
-    } else if (loginStatus === "login") {
-      return <LoginPage goLogin={setLoginStatus} />;
+  const [, { relaunch }] = useRouter();
+  const [form, setVal] = useState({ phone: "", password: "" });
+  const { run } = useRequest(request, {
+    manual: true,
+    onSuccess: ({ data }) => {
+      Taro.setStorageSync("token", data.token);
+      relaunch("/pages/home/index");
     }
+  });
+  const toLogin = () => {
+    let test = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/;
+    if (!form.phone) {
+      return Taro.showToast({
+        title: "请输入手机号",
+        icon: "none"
+      });
+    }
+    if (!form.password) {
+      return Taro.showToast({
+        title: "请输入密码",
+        icon: "none"
+      });
+    }
+    if (!test.test(form.phone)) {
+      Taro.showToast({ title: "请检查手机号格式!", icon: "none" });
+      return;
+    }
+    run("/wechat/login", "POST", form);
   };
-  return <View className='login'>{loginContent()}</View>;
+  return (
+    <View className='login'>
+      <AtMessage />
+      <View className='hello'>HELLO</View>
+      <View className='welcome'>欢迎登陆!</View>
+      <View className='login-page'>
+        <AtInput
+          border={false}
+          name='phone'
+          type='phone'
+          placeholder='请输入手机号'
+          value={form.phone}
+          onChange={(val: string) => {
+            setVal(formData => {
+              formData.phone = val;
+              return formData;
+            });
+          }}
+        />
+        <AtInput
+          border={false}
+          name='password'
+          type='password'
+          placeholder='请输入密码'
+          value={form.password}
+          onChange={(val: string) => {
+            setVal(formData => {
+              formData.password = val;
+              return formData;
+            });
+          }}
+        />
+        <View className='btn'>
+          <AtButton type='primary' onClick={toLogin}>
+            登录
+          </AtButton>
+        </View>
+        <View
+          onClick={() => {
+            Taro.navigateTo({ url: `/pages/intactInfo/index?type=regeist` });
+          }}
+          className='go-regesit'
+        >
+          去注册
+        </View>
+      </View>
+    </View>
+  );
 };
 
 export default Login;
