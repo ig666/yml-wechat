@@ -115,10 +115,13 @@ const Work = () => {
               查看
             </AtButton>
           </View>
-          <View className='remark'>
-            备注：
-            <View className='remark-item'>{item.remark}</View>
-          </View>
+          {item.remark ? (
+            <View className='remark'>
+              备注：<View className='remark-item'>{item.remark}</View>
+            </View>
+          ) : (
+            ""
+          )}
         </View>
       </>
     ));

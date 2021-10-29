@@ -46,10 +46,10 @@ const WorkDetail = () => {
   const { run, loading } = useRequest(request, {
     manual: true,
     debounceInterval: 500,
-    onSuccess: ({ data }, parmas) => {
+    onSuccess: ({ data }) => {
       if (data) {
-        console.log(data);
         Taro.showToast({ title: "上传成功" });
+        Taro.navigateBack();
       }
     }
   });
