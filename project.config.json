@@ -4,7 +4,7 @@
   "description": "牙美啦",
   "appid": "wx4cbf1d9884a157ef",
   "setting": {
-    "urlCheck": false,
+    "urlCheck": true,
     "es6": false,
     "enhance": true,
     "postcss": false,

@@ -17,6 +17,7 @@ const Login = () => {
     }
   });
   const toLogin = () => {
+    console.log(form, "表单");
     let test = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[189]))\d{8}$/;
     if (!form.phone) {
       return Taro.showToast({
@@ -49,10 +50,8 @@ const Login = () => {
           placeholder='请输入手机号'
           value={form.phone}
           onChange={(val: string) => {
-            setVal(formData => {
-              formData.phone = val;
-              return formData;
-            });
+            console.log(val, "触发");
+            setVal({ ...form, phone: val });
           }}
         />
         <AtInput
@@ -62,10 +61,7 @@ const Login = () => {
           placeholder='请输入密码'
           value={form.password}
           onChange={(val: string) => {
-            setVal(formData => {
-              formData.password = val;
-              return formData;
-            });
+            setVal({ ...form, password: val });
           }}
         />
         <View className='btn'>
@@ -75,7 +71,7 @@ const Login = () => {
         </View>
         <View
           onClick={() => {
-            Taro.navigateTo({ url: `/pages/intactInfo/index?type=regeist` });
+            Taro.redirectTo({ url: `/pages/intactInfo/index?type=regeist` });
           }}
           className='go-regesit'
         >

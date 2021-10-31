@@ -45,10 +45,14 @@ const IntactInfo = () => {
             icon: "success",
             duration: 2000
           });
-          Taro.navigateBack({ delta: 1 });
+          if (joinType === "update") {
+            Taro.navigateBack({ delta: 1 });
+          } else {
+            Taro.navigateTo({ url: "/pages/login/index" });
+          }
         }
       } else {
-        setInfo(data)
+        setInfo(data);
       }
     }
   });
