@@ -164,9 +164,8 @@ const WorkDetail = () => {
     Taro.hideLoading();
     if (!uploadErr) {
       workDetail!.status = 2;
-      workDetail!.wechatUserWorkPhotos = [];
-      fileUrls.map(item => {
-        workDetail!.wechatUserWorkPhotos.push({ photoUrl: item });
+      fileUrls.map((item, index) => {
+        workDetail!.wechatUserWorkPhotos[index].photoUrl = item;
       });
       run("/wechat-user-work", "PUT", workDetail);
     } else {
