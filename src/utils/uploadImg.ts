@@ -1,7 +1,7 @@
 /*
  * @Author: Qi.Chen
  * @Date: 2021-10-28 21:44:06
- * @LastEditTime: 2021-10-29 00:21:39
+ * @LastEditTime: 2021-10-31 16:21:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \yml-wechat\src\utils\uploadImg.ts
@@ -20,7 +20,7 @@ export const uploadImg = async (file: File): Promise<string> => {
             Authorization: token
           }
         : undefined,
-      url: "http://192.168.124.7:8080/alioss/wechat-upload",
+      url: "https://yameila.vip/node-serve/alioss/wechat-upload",
       filePath: file.url,
       name: "wechatWork",
       success: res => {
