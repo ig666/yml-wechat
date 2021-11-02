@@ -9,3 +9,8 @@ export const formattYMDHM = date => {
   let formatt = dayjs(date).format("YYYY-MM-DD HH:mm");
   return formatt;
 };
+
+export const formattYMD = date => {
+  let formatt = dayjs(date).format("YYYY-MM-DD");
+  return formatt;
+};
