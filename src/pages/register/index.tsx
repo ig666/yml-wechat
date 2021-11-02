@@ -6,7 +6,7 @@ import { useRequest } from "taro-hooks";
 import NoData from "@/components/noData";
 import NoLogin from "@/components/noLogin";
 import { AtButton } from "taro-ui";
-import { formattYMDHMS } from "@/utils/formDate";
+import { formattYMDHM } from "@/utils/formDate";
 import "./index.less";
 
 const Register = () => {
@@ -61,7 +61,7 @@ const Register = () => {
               <View className='title'>{item.semesterTitle}</View>
             </View>
             <View className='time'>
-              开课时间:{formattYMDHMS(item.classStartTime)}
+              开课时间:{formattYMDHM(item.classStartTime)}
             </View>
           </View>
           <View className='content'>{item.content}</View>

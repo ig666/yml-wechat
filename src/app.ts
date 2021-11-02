@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import 'taro-ui/dist/style/index.scss'
+import './taroStyle/custom-variables.scss'
 import './app.less';
 
 class App extends Component {
