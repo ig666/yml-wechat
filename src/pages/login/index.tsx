@@ -40,8 +40,8 @@ const Login = () => {
   return (
     <View className='login'>
       <AtMessage />
-      <View className='hello'>HELLO</View>
-      <View className='welcome'>欢迎登陆!</View>
+      <View className='hello'>欢迎进入牙美啦学习平台</View>
+      <View className='welcome'>选择口腔  不负口腔</View>
       <View className='login-page'>
         <AtInput
           border={false}
