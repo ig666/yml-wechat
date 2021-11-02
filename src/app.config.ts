@@ -12,12 +12,12 @@ export default {
     backgroundTextStyle: "light",
     navigationBarTitleText: "牙美啦",
     navigationBarTextStyle: "white",
-    navigationBarBackgroundColor: "#6190E8"
+    navigationBarBackgroundColor: "#7445c9"
   },
   tabBar: {
     color: "#333333",
     backgroundColor: "#fafafa",
-    selectedColor: "#6190E8",
+    selectedColor: "#7445c9",
     borderStyle: "white",
     list: [
       {
