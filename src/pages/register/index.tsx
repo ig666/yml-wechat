@@ -31,21 +31,48 @@ const Register = () => {
           if (loading) {
             setLoading(false);
           }
-        } else if (parmas[0] === "/semester/signUp") {
-          Taro.showToast({ title: data, icon: "success", duration: 2000 });
-          setList([]);
-          setLoading(true);
-          setPageNation({
-            pageSize: 10,
-            pageIndex: 1
-          });
+        } else if (parmas[0] === "/wechat/payJsapi") {
+          Taro.requestPayment({
+            ...data,
+            success: (res) => {
+              console.log(res, '支付成功');
+              // Taro.showToast({ title: data, icon: "success", duration: 2000 });
+              // setList([]);
+              // setLoading(true);
+              // setPageNation({
+              //   pageSize: 10,
+              //   pageIndex: 1
+              // });
+            },
+            fail: (res) => {
+              console.log(res,'支付失败');
+            }
+          })
         }
       }
     }
   });
   //方法类
-  const toSignup = semesterId => {
-    run("/semester/signUp", "POST", { semesterId }, false);
+  const toSignup = (semesterId, price, description) => {
+    Taro.login({
+      success: res => {
+        if (res.code) {
+          run(
+            "/wechat/payJsapi",
+            "POST",
+            {
+              semesterId,
+              code: res.code,
+              total: price,
+              description: description
+            },
+            false
+          );
+        } else {
+          Taro.showToast({ title: "获取code失败!" });
+        }
+      }
+    });
   };
   const renderList = () => {
     if (semesterList && semesterList.length <= 0) {
@@ -69,7 +96,7 @@ const Register = () => {
             <View className='price'>{item.price}￥</View>
             <AtButton
               onClick={() => {
-                toSignup(item.id);
+                toSignup(item.id, item.price, item.semesterName);
               }}
               type='primary'
               className='signup'

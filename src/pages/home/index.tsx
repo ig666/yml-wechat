@@ -22,7 +22,7 @@ const Home = () => {
         src='https://yameila.oss-cn-beijing.aliyuncs.com/home/62474-developing.gif'
       ></Image>
       <View className='dev-name'>暂未开放...</View>
-      <AtButton onClick={openId}>生成openid</AtButton>
+      {/* <AtButton onClick={openId}>生成openid</AtButton> */}
     </View>
   );
 };
