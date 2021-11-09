@@ -20,6 +20,20 @@ const Register = () => {
   });
   const [total, setTotal] = useState(0);
   //请求类
+
+  const { run: getOrder } = useRequest(request, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: ({ data }) => {
+      if (data) {
+        console.log(data);
+        Taro.navigateTo({
+          url: "/pages/paySuccess/index"
+        });
+      }
+    }
+  });
+
   const { run } = useRequest(request, {
     manual: true,
     debounceInterval: 500,
@@ -34,20 +48,15 @@ const Register = () => {
         } else if (parmas[0] === "/wechat/payJsapi") {
           Taro.requestPayment({
             ...data,
-            success: (res) => {
-              console.log(res, '支付成功');
-              // Taro.showToast({ title: data, icon: "success", duration: 2000 });
-              // setList([]);
-              // setLoading(true);
-              // setPageNation({
-              //   pageSize: 10,
-              //   pageIndex: 1
-              // });
+            success: result => {
+              getOrder("/wxpay/get-order-result", "GET", {
+                out_trade_no: data.orderId
+              });
             },
-            fail: (res) => {
-              console.log(res,'支付失败');
+            fail: res => {
+              console.log(res, "支付失败");
             }
-          })
+          });
         }
       }
     }

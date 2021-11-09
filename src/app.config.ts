@@ -6,7 +6,8 @@ export default {
     "pages/register/index",
     "pages/work/index",
     "pages/workDetail/index",
-    "pages/intactInfo/index"
+    "pages/intactInfo/index",
+    "pages/paySuccess/index"
   ],
   window: {
     backgroundTextStyle: "light",
