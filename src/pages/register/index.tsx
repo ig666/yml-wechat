@@ -1,6 +1,6 @@
 import { View, ScrollView } from "@tarojs/components";
 import { useEffect, useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useDidShow } from "@tarojs/taro";
 import { request } from "@/utils/request";
 import { useRequest } from "taro-hooks";
 import NoData from "@/components/noData";
@@ -138,6 +138,14 @@ const Register = () => {
       setLoginStatus(false);
     }
   }, []);
+  useDidShow(() => {
+    setLoading(true);
+    setList([]);
+    setPageNation({
+      pageSize: 10,
+      pageIndex: 1
+    });
+  });
   return (
     <View className='register'>
       {loginStatus ? (

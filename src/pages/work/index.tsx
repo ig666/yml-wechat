@@ -1,6 +1,6 @@
 import { View, ScrollView, Image } from "@tarojs/components";
 import { useEffect, useState } from "react";
-import Taro from "@tarojs/taro";
+import Taro, { useDidShow } from "@tarojs/taro";
 import { request } from "@/utils/request";
 import { AtButton } from "taro-ui";
 import { useRequest } from "taro-hooks";
@@ -150,6 +150,14 @@ const Work = () => {
     };
     getList(params);
   }, [loginStatus, pageNation]);
+  useDidShow(() => {
+    setLoading(true);
+    setList([]);
+    setPageNation({
+      pageSize: 10,
+      pageIndex: 1
+    });
+  });
   return (
     <View className='work'>
       {loginStatus ? (
