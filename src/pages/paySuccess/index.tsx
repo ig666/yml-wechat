@@ -1,18 +1,21 @@
 import { View, Image } from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import { AtButton } from "taro-ui";
+import Paysuccess from "@/asstes/images/paysuccess.png";
 import "./index.less";
 
 const PaySuccess = () => {
   //方法类
   const backPage = () => {
-    Taro.redirectTo({ url: "pages/register/index" });
-    };
+    Taro.navigateBack();
+  };
   return (
     <View className='pay-success'>
-      <Image src='@/asstes/images/paysuccess.png' />
-      <View>支付成功</View>
-      <AtButton onClick={backPage}>返回</AtButton>
+      <Image className='pay-image' src={Paysuccess} />
+      <View className='text'>支付成功</View>
+      <AtButton size='small' className='btn' type='primary' onClick={backPage}>
+        返回
+      </AtButton>
     </View>
   );
 };
