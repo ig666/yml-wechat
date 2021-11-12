@@ -15,7 +15,7 @@ export const request = (url, method, params?, showLoading = true) => {
             Authorization: token
           }
         : undefined,
-      url: "http://localhost:8080" + url, //开发者服务器接口地址",
+      url: "https://yameila.vip/api" + url, //开发者服务器接口地址",
       data: params, //请求的参数",
       method: method,
       dataType: "json", //如果设为json，会尝试对返回的数据做一次 JSON.parse
