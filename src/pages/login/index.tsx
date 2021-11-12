@@ -50,7 +50,6 @@ const Login = () => {
           placeholder='请输入手机号'
           value={form.phone}
           onChange={(val: string) => {
-            console.log(val, "触发");
             setVal({ ...form, phone: val });
           }}
         />
