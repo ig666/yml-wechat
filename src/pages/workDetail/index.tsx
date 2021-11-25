@@ -121,10 +121,7 @@ const WorkDetail = () => {
             count={workDetail?.wechatUserWorkPhotos.length}
             files={files}
             onChange={file => {
-              if (
-                files.length + files.length >
-                workDetail!.wechatUserWorkPhotos.length
-              ) {
+              if (file.length > workDetail!.wechatUserWorkPhotos.length) {
                 return Taro.showToast({
                   title: "不可超过模板数",
                   icon: "none"
@@ -150,27 +147,26 @@ const WorkDetail = () => {
   const submitWork = async (status: number) => {
     if (files.length <= 0)
       return Taro.showToast({ title: "至少选择一张图片", icon: "none" });
-    let uploadErr = false;
     let fileUrls: string[] = [];
+    let fetchArr: any[] = [];
     Taro.showLoading({ title: "上传中" });
     for (let file of files) {
-      let url = await uploadImg(file);
-      if (url) {
-        fileUrls.push(url);
-      } else {
-        uploadErr = true;
-      }
+      fetchArr.push(uploadImg(file));
     }
-    Taro.hideLoading();
-    if (!uploadErr) {
-      workDetail!.status = 2;
-      fileUrls.map((item, index) => {
-        workDetail!.wechatUserWorkPhotos[index].photoUrl = item;
+    Promise.all(fetchArr)
+      .then(res => {
+        Taro.hideLoading();
+        fileUrls = res;
+        workDetail!.status = 2;
+        fileUrls.map((item, index) => {
+          workDetail!.wechatUserWorkPhotos[index].photoUrl = item;
+        });
+        run("/wechat-user-work", "PUT", workDetail);
+      })
+      .catch(error => {
+        Taro.hideLoading();
+        Taro.showToast({ title: "上传失败", icon: "none" });
       });
-      run("/wechat-user-work", "PUT", workDetail);
-    } else {
-      Taro.showToast({ title: "上传失败", icon: "none" });
-    }
   };
   const toOk = async () => {
     if (workDetail?.status === 2 || workDetail?.status === 3) {
