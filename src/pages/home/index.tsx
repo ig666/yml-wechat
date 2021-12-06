@@ -1,28 +1,60 @@
-import { View, Image } from "@tarojs/components";
-import { AtButton } from "taro-ui";
+import { View, Swiper, SwiperItem, Image } from "@tarojs/components";
+import { useState } from "react";
 import Taro from "@tarojs/taro";
 import "./index.less";
 
 const Home = () => {
-  const openId = () => {
-    Taro.login({
-      success: function(res) {
-        if (res.code) {
-          console.log(res.code, "参数");
-        } else {
-          console.log("登录失败！" + res.errMsg);
-        }
-      }
+  /**
+   * descript 图片尽量按照 375*200比列来
+   */
+  const [bannerList, setbannerList] = useState<string[]>([
+    "https://img10.360buyimg.com/babel/s700x360_jfs/t25855/203/725883724/96703/5a598a0f/5b7a22e1Nfd6ba344.jpg!q90!cc_350x180",
+    "https://img11.360buyimg.com/babel/s700x360_jfs/t1/4776/39/2280/143162/5b9642a5E83bcda10/d93064343eb12276.jpg!q90!cc_350x180",
+    "https://img14.360buyimg.com/babel/s700x360_jfs/t1/4099/12/2578/101668/5b971b4bE65ae279d/89dd1764797acfd9.jpg!q90!cc_350x180"
+  ]);
+  const renderBanner = () => {
+    return bannerList.map((item, index) => {
+      return (
+        <SwiperItem key={index}>
+          <Image className='banner-item' src={item}></Image>
+        </SwiperItem>
+      );
     });
   };
   return (
     <View className='home'>
-      <Image
-        className='devlping'
-        src='https://yameila.oss-cn-beijing.aliyuncs.com/home/62474-developing.gif'
-      ></Image>
-      <View className='dev-name'>暂未开放...</View>
-      {/* <AtButton onClick={openId}>生成openid</AtButton> */}
+      <Swiper
+        className='banner-list'
+        indicatorColor='#999'
+        indicatorActiveColor='#7445c9'
+        circular
+        indicatorDots
+        autoplay
+      >
+        {renderBanner()}
+      </Swiper>
+      <View
+        onClick={() => {
+          Taro.navigateTo({ url: "/pages/aboutUs/index" });
+        }}
+      >
+        关于我们
+      </View>
+      <View>联系我们</View>
+      <View
+        onClick={() => {
+          Taro.navigateTo({ url: "/pages/showStudent/index" });
+        }}
+      >
+        学员展示
+      </View>
+      <View
+        onClick={() => {
+          Taro.navigateTo({ url: "/pages/aboutClass/index" });
+        }}
+      >
+        关于课程
+      </View>
     </View>
   );
 };

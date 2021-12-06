@@ -7,7 +7,10 @@ export default {
     "pages/work/index",
     "pages/workDetail/index",
     "pages/intactInfo/index",
-    "pages/paySuccess/index"
+    "pages/paySuccess/index",
+    "pages/aboutUs/index",
+    "pages/aboutClass/index",
+    "pages/showStudent/index"
   ],
   window: {
     backgroundTextStyle: "light",
