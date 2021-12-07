@@ -1,5 +1,10 @@
 import { View, Swiper, SwiperItem, Image } from "@tarojs/components";
+import { AtGrid } from "taro-ui";
 import { useState } from "react";
+import teamImg from "@/asstes/images/team.png";
+import classImg from "@/asstes/images/class.png";
+import zhanshiImg from "@/asstes/images/zhanshi.png";
+import contactImg from "@/asstes/images/contact.png";
 import Taro from "@tarojs/taro";
 import "./index.less";
 
@@ -21,6 +26,24 @@ const Home = () => {
       );
     });
   };
+  const chooseFnc = item => {
+    switch (item.value) {
+      case "关于我们":
+        Taro.navigateTo({ url: "/pages/aboutUs/index" });
+        break;
+      case "关于课程":
+        Taro.navigateTo({ url: "/pages/aboutClass/index" });
+        break;
+      case "学员展示":
+        Taro.navigateTo({ url: "/pages/showStudent/index" });
+        break;
+      case "联系我们":
+        break;
+      default:
+        console.log("错误功能项");
+        break;
+    }
+  };
   return (
     <View className='home'>
       <Swiper
@@ -33,28 +56,27 @@ const Home = () => {
       >
         {renderBanner()}
       </Swiper>
-      <View
-        onClick={() => {
-          Taro.navigateTo({ url: "/pages/aboutUs/index" });
-        }}
-      >
-        关于我们
-      </View>
-      <View>联系我们</View>
-      <View
-        onClick={() => {
-          Taro.navigateTo({ url: "/pages/showStudent/index" });
-        }}
-      >
-        学员展示
-      </View>
-      <View
-        onClick={() => {
-          Taro.navigateTo({ url: "/pages/aboutClass/index" });
-        }}
-      >
-        关于课程
-      </View>
+      <AtGrid
+        onClick={chooseFnc}
+        data={[
+          {
+            image: teamImg,
+            value: "关于我们"
+          },
+          {
+            image: classImg,
+            value: "关于课程"
+          },
+          {
+            image: zhanshiImg,
+            value: "优秀作品"
+          },
+          {
+            image: contactImg,
+            value: "联系我们"
+          }
+        ]}
+      />
     </View>
   );
 };
