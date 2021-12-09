@@ -57,6 +57,8 @@ const Home = () => {
         {renderBanner()}
       </Swiper>
       <AtGrid
+        hasBorder={false}
+        columnNum={4}
         onClick={chooseFnc}
         data={[
           {
