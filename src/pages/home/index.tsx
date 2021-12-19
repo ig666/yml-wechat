@@ -34,8 +34,8 @@ const Home = () => {
       case "关于课程":
         Taro.navigateTo({ url: "/pages/aboutClass/index" });
         break;
-      case "学员展示":
-        Taro.navigateTo({ url: "/pages/showStudent/index" });
+      case "优秀作品":
+        Taro.navigateTo({ url: "/pages/goodGroup/index" });
         break;
       case "联系我们":
         break;
@@ -49,7 +49,7 @@ const Home = () => {
       <Swiper
         className='banner-list'
         indicatorColor='#999'
-        indicatorActiveColor='#7445c9'
+        indicatorActiveColor='#c8a063'
         circular
         indicatorDots
         autoplay

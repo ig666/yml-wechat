@@ -10,18 +10,20 @@ export default {
     "pages/paySuccess/index",
     "pages/aboutUs/index",
     "pages/aboutClass/index",
-    "pages/showStudent/index"
+    "pages/showStudent/index",
+    "pages/goodGroup/index",
+    "pages/goodImgList/index"
   ],
   window: {
     backgroundTextStyle: "light",
     navigationBarTitleText: "牙美啦",
     navigationBarTextStyle: "white",
-    navigationBarBackgroundColor: "#7445c9"
+    navigationBarBackgroundColor: "#c8a063"
   },
   tabBar: {
     color: "#333333",
     backgroundColor: "#fafafa",
-    selectedColor: "#7445c9",
+    selectedColor: "#c8a063",
     borderStyle: "white",
     list: [
       {
