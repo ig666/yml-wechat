@@ -1,5 +1,9 @@
 import { View, Swiper, SwiperItem, Image } from "@tarojs/components";
-import { AtGrid } from "taro-ui";
+import {
+  AtGrid,
+  AtModal,
+  AtModalContent
+} from "taro-ui";
 import { useState } from "react";
 import teamImg from "@/asstes/images/team.png";
 import classImg from "@/asstes/images/class.png";
@@ -38,6 +42,10 @@ const Home = () => {
         Taro.navigateTo({ url: "/pages/goodGroup/index" });
         break;
       case "联系我们":
+        Taro.previewImage({
+          current: 'https://yameila.oss-cn-beijing.aliyuncs.com/home/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211219224359.jpg',
+          urls:['https://yameila.oss-cn-beijing.aliyuncs.com/home/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211219224359.jpg']
+        })
         break;
       default:
         console.log("错误功能项");

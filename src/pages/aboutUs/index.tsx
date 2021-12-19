@@ -3,7 +3,7 @@ import "./index.less";
 
 const AboutUs = () => {
   return (
-    <Image className='about-us' src='https://st-gdx.dancf.com/gaodingx/0/uxms/design/20210208-111843-50a3.png?x-oss-process=image/resize,w_932/interlace,1,image/format,webp' />
+    <Image className='about-us' src='https://yameila.oss-cn-beijing.aliyuncs.com/home/%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D.jpg?versionId=CAEQFhiBgICCouvM7hciIDY1ZTBjZDc0ZWVjZDQyZTliNTAyMTY0YTA3NDlhMzAz' />
   );
 };
 
