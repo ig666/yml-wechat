@@ -17,9 +17,11 @@ const Home = () => {
    * descript 图片尽量按照 375*200比列来
    */
   const [bannerList, setbannerList] = useState<string[]>([
-    "https://img10.360buyimg.com/babel/s700x360_jfs/t25855/203/725883724/96703/5a598a0f/5b7a22e1Nfd6ba344.jpg!q90!cc_350x180",
-    "https://img11.360buyimg.com/babel/s700x360_jfs/t1/4776/39/2280/143162/5b9642a5E83bcda10/d93064343eb12276.jpg!q90!cc_350x180",
-    "https://img14.360buyimg.com/babel/s700x360_jfs/t1/4099/12/2578/101668/5b971b4bE65ae279d/89dd1764797acfd9.jpg!q90!cc_350x180"
+    "https://yameila.oss-cn-beijing.aliyuncs.com/banner/banner1.jpg",
+    "https://yameila.oss-cn-beijing.aliyuncs.com/banner/banner2.jpg",
+    "https://yameila.oss-cn-beijing.aliyuncs.com/banner/banner3.jpg",
+    "https://yameila.oss-cn-beijing.aliyuncs.com/banner/banner4.jpg",
+    "https://yameila.oss-cn-beijing.aliyuncs.com/banner/banner5.jpg"
   ]);
   const renderBanner = () => {
     return bannerList.map((item, index) => {
